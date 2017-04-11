@@ -1,0 +1,77 @@
+{% set os_family_map = salt['grains.filter_by']({
+    'default': {
+        'atop_package': 'atop',
+        'bash_completion_package': 'bash-completion',
+        'dkms_package': 'dkms',
+        'dmidecode_package': 'dmidecode',
+        'emacs_package': 'emacs-nox',
+        'finger_package': 'finger',
+        'fping_package': 'fping',
+        'fuse_package': 'fuse',
+        'git_package': 'git',
+        'htop_package': 'htop',
+        'iftop_package': 'iftop',
+        'iotop_package': 'iotop',
+        'lshw_package': 'lshw',
+        'lsof_package': 'lsof',
+        'lsscsi_package': 'lscsi',
+        'lynx_package': 'lynx',
+        'mc_package': 'mc',
+        'mlocate_package': 'mlocate',
+        'mtr_package': 'mtr',
+        'mutt_package': 'mutt',
+        'nano_package': 'nano',
+        'nethogs_package': 'nethogs',
+        'ngrep_package': 'ngrep',
+        'nmap_package': 'nmap',
+        'pamtester_package': 'pamtester',
+        'screen_package': 'screen',
+        'sharutils_package': 'sharutils',
+        'strace_package': 'strace',
+        'subversion_package': 'subversion',
+        'sysstat_package': 'sysstat',
+        'tcpdump_package': 'tcpdump',
+        'telnet_package': 'telnet',
+        'tmux_package': 'tmux',
+        'tree_package': 'tree',
+        'unzip_package': 'unzip',
+        'wget_package': 'wget',
+    },
+    
+    'Debian': {
+        'dnsutils_package': ['dnsutils', 'bind9-host'],
+        'lsb_core_package': 'lsb-core',
+        'mailutils_package': 'mailutils',
+        'netcat_package': 'netcat-openbsd',
+        'traceroute_package': ['traceroute', 'tcptraceroute'],
+        'vim_package': 'vim',
+        
+        # Debian-specific packages
+        'apt_file_package': 'apt-file',
+    },
+    
+    'RedHat': {
+        'dnsutils_package': 'bind-utils',
+        'lsb_core_package': 'redhat-lsb-core',
+        'mailutils_package': 'mailx',
+        'netcat_package': salt['grains.filter_by']({
+            'default': 'nmap-ncat',
+            '6': 'nc',
+            '7': 'nmap-ncat',
+        }, grain='osmajorrelease'),
+        'traceroute_package': salt['grains.filter_by']({
+            'default': 'traceroute',
+            '6': ['traceroute', 'tcptraceroute'],
+            '7': 'traceroute',
+        }, grain='osmajorrelease'),
+        'vim_package': 'vim-enhanced',
+        
+        # RedHat-specific packages
+        'yum_utils_package': 'yum-utils',
+        'yum_versionlock_package': 'yum-plugin-versionlock',
+    },
+    
+  },
+  grain='os_family',
+  merge=salt['pillar.get']('common_tools:lookup'))
+%}
